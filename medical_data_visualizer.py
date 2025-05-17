@@ -4,13 +4,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 1
-df = None
+df = pd.read_csv('medical_examination.csv')
 
 # 2
-df['overweight'] = None
+bmi = df['weight'] / ((df['height'] / 100) ** 2)
+df['overweight'] = (bmi > 25).astype(int)
+
 
 # 3
-
+df['cholesterol'] = df['cholesterol'].apply(lambd ax: 0 if x == 1 else 1)
+df['gluc'] = df['gluc'].apply(lambda x: 0 if x == 1 else 1)
 
 # 4
 def draw_cat_plot():
