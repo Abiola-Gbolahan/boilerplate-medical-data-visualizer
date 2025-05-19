@@ -26,13 +26,20 @@ def draw_cat_plot():
     
     
 
-    # 7
-
-
-
+    # 7 Draw the catplot
+    g = sns.catplot(
+        data=df_cat, 
+        kind='bar', 
+        x='variable', 
+        y='total', 
+        hue='value', 
+        col='cardio', 
+        height=5, 
+        aspect=1
+    )
+    
     # 8
-    fig = None
-
+    fig = g.fig
 
     # 9
     fig.savefig('catplot.png')
@@ -41,24 +48,28 @@ def draw_cat_plot():
 
 # 10
 def draw_heat_map():
-    # 11
-    df_heat = None
+    # 11 Clean the data
+    df_heat = df[(df['ap_lo'] <= df['ap_hi']) &
+                 (df['height'] >= df['height'].quantile(0.025)) &
+                 (df['height'] <= df['height'].quantile(0.975)) &
+                 (df['weight'] >= df['weight'].quantile(0.025)) &
+                 (df['weight'] <= df['weight'].quantile(0.975))]
 
     # 12
-    corr = None
+    corr = corr = df_heat.corr()
 
     # 13
-    mask = None
-
-
+    mask = mask = np.triu(np.ones_like(corr, dtype=bool))
 
     # 14
-    fig, ax = None
+    fig, ax = plt.subplots(figsize=(12, 12))
 
     # 15
-
+    sns.heatmap(corr, mask=mask, annot=True, fmt='.1f', cmap='coolwarm', cbar_kws={'shrink': 0.5})
 
 
     # 16
     fig.savefig('heatmap.png')
     return fig
+draw_cat_plot()
+draw_heat_map()
